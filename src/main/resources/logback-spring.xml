@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty name="log.path" source="log.path"/>
+
+    <appender name="partyLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/party.log</file>
+        <encoder>
+            <pattern>%d [%-5p] \(%.10thread\) %c %X{requestId} %X{appKey} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/party-%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
+            <maxHistory>48</maxHistory>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="performanceTracingLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/party-perf.log</file>
+        <encoder>
+            <pattern>%d %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/party-perf-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>48</maxHistory>
+            <maxFileSize>100MB</maxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="partyLog" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="com.sj.partybooking" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="partyLog" />
+    </logger>
+
+</configuration>
